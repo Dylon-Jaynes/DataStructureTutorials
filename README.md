@@ -11,7 +11,6 @@ Now that we understand what a set is, let’s take a look at some built-in metho
 
 
 
-
 |**Function**  |**Description**  |**Big O Notation**|
 | :- | :- | :- |
 |add()  |Adds an element to the set. |O(1)|
@@ -71,4 +70,4 @@ elementList3 = ["Pb", "Ds", "Mc", "Mo", "Po", "At", "Xe"]
     
 Click the following link for the solution. 
 
-[Sets Example Solution](Sets%20Code%20Example%20Solution.docx)
+[Sets Example Solution](SetsCodeExampleSolution.md)
