@@ -1,73 +1,153 @@
+Our second data structure is a “Queue”.
 
-Let’s take a look at our first data structure, a “Set”. 
+\*Image from dbader.org
 
+A queue data structure is used to store data in a style which is “First In, First Out” (FIFO). Queues are similar to stacks but are different in that they allow for inserting and removing from both ends of the data structure. If you think about how a line at a store works, this may start to make more sense. Imagine there are 3 people standing in the line. You walk up and take your place in line but now you have to wait until the people who arrived first take their turns. Not a minute into waiting, 10 other people come and take their place in line behind you. Luckily, because you arrived first, you won’t have to wait for all of them. You will get taken care of first. This is “First In, First Out” in action and is exactly what a queue allows for.
 
-Sets are an unordered collection data type which is iterable, immutable, can contain data of all types, and cannot contain duplicates. These properties of a set allow us to do things such as removing duplicate items from data structures that allows duplicates such as a List, a Tuple, or even a String. They allow us to check for membership efficiently as they are optimized for such operations *(average time complexity is O(1) as opposed to O(n) for lists).* Sets are also commonly used to perform certain math operation like a union or an intersection.
-
-There is a common “gotcha” to consider when using sets. While sets can contain data of all types, sets cannot contain a data type that is not hashable. This means that you cannot insert a list or a set into a set. Instead of a list or a set, you must use a tuple or a frozenset as they can be hashed. This is because the data contained within a set must be immutable, meaning it can’t be changed. 
-
-Now that we understand what a set is, let’s take a look at some built-in methods along with their time complexity. *\*Note, this is not a comprehensive list.*
-
-
-
+Below are some operations of a queue along with their time complexity when implemented with a python list:
 
 |**Function**  |**Description**  |**Big O Notation**|
 | :- | :- | :- |
-|add()  |Adds an element to the set. |O(1)|
-|clear()  |Removes all the elements from the set. |O(1)|
-|copy()  |Returns a copy of the set. |O(n)|
-|len()  |Returns the length of the set. |O(1)|
-|symmetric\_difference()|Returns the symmetric difference of two sets as a new set.|O(n)|
-|difference()  |Returns a set containing the difference between two or more sets. |O(n)|
-|intersection()  |Returns the intersection of two other sets. |O(n)|
-|union()  |Returns a set containing the union of sets. |O(n)|
-|discard()  |Removes the specified element. |O(1)|
-|remove()  |Removes the specified element, throws an error if the element does not exist. |O(1)|
-|<p>pop()  </p><p></p>|Removes a random element from the set and returns it. |O(1)|
+|queue.Enqueu()  |Adds an element to the back of the queue  |O(1)|
+|queue.Dequeu()  |Removes an element from the front of the queue  |O(n)|
+
+
+Below is an image diagram that illustrates what a queue might look like.
+
+\*Image from 101computing.net
+
+As you can see, dequeue takes elements from the front just like a person standing in line would be dequeued when their turn is up. Enqueue adds an element to the back just like someone getting in the back of the line.
+
+Now that we fundamentally understand what a queue is, let’s look at some examples.
+
+Imagine you are building an app for a DJ that will allow users to send song requests to that DJ which will be played in the order they are received. You are given 3 lists of songs that are in order. If there are no songs in the list, you should display that there are no requested songs. How will you display the next song to be played to the DJ?
+
+Here are the lists of songs:
 
 
 
+```
+songList = ["Welcome to Paradise", "Smells Like Teen Spirit", "Come as You Are" "Blackbird", "On the Wing", "Nothing Else Matters"]
 
-Below we have a diagram taken from cloudinary.com which illustrates difference(), symmetric\_difference(), intersection(), and union() functions.
+songList2 = ["Super Bon Bon", "For Once In My Life", "Start the Machine"]
+
+songList3 = []
+```
 
 
-Knowing what a set is, let’s look at an example:
+There are various ways to implement a queue in python but for the sake of simplicity, we will use the python list implementation. This method provides us with O(1) time complexity for append operations and O(n) time complexity for pop opperations. First we will include the Queue class.
 
-Imagine that you have a set of current faculty member names for each year between 2018 and 2021. You are tasked with getting all of the faculty names from 2018 – 2021 into one data structure without any duplicates. Order is not important in this case.
+```
+class Queue:
+    """
+    A basic implementation of a Queue
+    """
 
-Here are the sets of names:
+    def __init__(self):
+        """
+        Start with an empty queue.
+        """
+        self.queue = []
 
-```   
-set2018 = {"Jeremy", "Melissa", "Cole", "Roger", "Mathew"}
+    def enqueue(self, value):
+        """
+        Add an item to the queue
+        """
+        self.queue.append(value)
 
-set2019 = {"Jeremy", "Melissa", "Kent", "Jason", "Mathew", "Barbara"}
+    def dequeue(self):
+        """
+        Remove the next item from the queue. 
+        """
+        value = self.queue[0]
+        del self.queue[0]
+        return value
 
-set2020 = {"Melissa", "Kent", "Jason", "Keith", "Dylon", "Jackson", "Brandon"}
+    def is_empty(self):
+        """
+        Check to see if the queue is empty.
+        """
+        return len(self.queue) == 0
     
-set2021 = {"Brandon", "Bethany", "Mike", "Keith", "Mia", "Fred", "George", "Timothy"}
+    def __len__(self):
+        """
+        Support the len() function
+        """
+        return len(self.queue)
+
+    def __str__(self):
+        """
+        Provide a string representation for this object.
+        """
+        result = "["
+        for item in self.queue:
+            result += str(item)
+            result += ", "
+        result += "]"
+        return result
+```
+
+Next we will include our queue function (notice how we are using the enqueue and dequeue methods specified in the Queue class):
+
+```
+def queueDemo(songList):
+
+    # Create an instance of Queue.
+
+    songQueue = Queue()
+
+    # If there are songs in the list, add them to the queue.
+
+    if len(songList) == 0:
+
+        print("There are no requested songs.")
+
+    else:
+
+        for song in songList:
+
+            songQueue.enqueue(song)
+
+
+    # Loop through the queue and dequeu the elements.
+
+    while len(songQueue) != 0:
+
+        print(songQueue.dequeue())
+```
+
+Now let's make calls to our methods with the data:
+
+```
+songList = ["Welcome to Paradise", "Smells Like Teen Spirit", "Come as You Are", "Blackbird", "On the Wing", "Nothing Else Matters"]
+
+songList2 = ["Super Bon Bon", "For Once In My Life", "Start the Machine"]
+
+songList3 = []
+
+queueDemo(songList)
+
+queueDemo(songList2)
+
+queueDemo(songList3)
+
+```
+
+Now that you have had some practice, here is a problem to solve on your own.
+
+You are given two lists of current customer names for two adjacent fast-food restaurants. One list per restaurant. You are tasked with making sure that orders get delivered to the most recent customers first for each restaurant. Display each name in the correct order. When the queue is finished, send a message to the user that all the customers of that restaurant have been served. How would you solve this using a queue?
+
+Here are the lists of names:
+
+
+
+```
+nameList1 = ["John", "Jeremy", "Melinda", "Greg", "Bethony", "Mark"]
+
+nameList2 = ["Jim", "Jared", "Logan", "Mike", "Melvin"]
 ```
 
 
-This is a very simple problem that can be solved in one line with a sets union() method. 
+Here is a link to the solution.
 
-```
-set2018To2021 = set2018.union(set2019, set2020, set2021)
-```
-
-This single line of code stores all of the unique names from all the sets into one unordered set. You can then simply display the names using print().
-
-Now try and solve the following problem on your own. You have 3 lists that contains the elements from the periodic table that are used in 3 separate scientific experiments. You need to get all the elements that were used in all 3 of those experiments into a data structure with no duplicate elements. Order is not important.
-
-Here are the lists of elements.
-
-```
-elementList1 = ["Be", "Mg", "Ni", "He", "Se"]
-
-elementList2 = ["Be", "Mg", "Ru", "Mo", "Pb", "In", "Lv", "Po"]
-
-elementList3 = ["Pb", "Ds", "Mc", "Mo", "Po", "At", "Xe"]
-```
-    
-Click the following link for the solution. 
-
-[Sets Example Solution](SetsCodeExampleSolution.md)
+[Queue Example Solution](Queue%20Code%20Example%20Solution.docx)
